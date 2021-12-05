@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.24722222222222223" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/expand_more.xml" value="0.19479166666666667" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/expand_more_background.xml" value="0.19479166666666667" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/expand_more_foreground.xml" value="0.19479166666666667" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/activity_insception_list.xml" value="0.17864583333333334" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/activity_inspection_flow.xml" value="0.10099637681159421" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_first.xml" value="0.1" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_list_name_data.xml" value="0.25" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_review.xml" value="0.1" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_upload_image.xml" value="0.22" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/inception_row_layout.xml" value="0.25" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/login_layout.xml" value="0.1" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/question_radio_layout.xml" value="0.25" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/mipmap-anydpi-v26/expand_more_round.xml" value="0.19479166666666667" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/xml/file_paths.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/close.xml" value="0.24479166666666666" />
+        <entry key="app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.24479166666666666" />
+        <entry key="app/src/main/res/drawable/left_enter.xml" value="0.25677083333333334" />
+        <entry key="app/src/main/res/drawable/login_button_selector.xml" value="0.25677083333333334" />
+        <entry key="app/src/main/res/drawable/text_selector.xml" value="0.25677083333333334" />
+        <entry key="app/src/main/res/layout/activity_insception_list.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/activity_inspection_flow.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/activity_login_sign_up_activityy.xml" value="0.11302083333333333" />
+        <entry key="app/src/main/res/layout/activity_login_signup.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/content_inspection_flow.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/custom_toast.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/forgotpassword_layout.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/fragment_forgot_password.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/fragment_fullscreen.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/fragment_inspection_validation_dialog.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/fragment_loginn.xml" value="0.11302083333333333" />
+        <entry key="app/src/main/res/layout/fragment_pin.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/fragment_sign_up.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/inception_row_layout.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/left_enter.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/login_layout.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/signup_layout.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/text_selector.xml" value="0.240625" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
