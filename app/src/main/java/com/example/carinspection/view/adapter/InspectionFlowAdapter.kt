@@ -5,10 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.carinspection.model.LeadData
 import com.example.carinspection.model.ListNameData
-import com.example.carinspection.view.fragment.FirstFragment
-import com.example.carinspection.view.fragment.ListNameDataFragment
-import com.example.carinspection.view.fragment.ReviewFragment
-import com.example.carinspection.view.fragment.UploadImageFragment
+import com.example.carinspection.view.fragment.*
 
 class InspectionFlowAdapter(fragmentManager: FragmentManager,var leadData: LeadData,var listNameDataList: List<ListNameData>):FragmentPagerAdapter(fragmentManager,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getCount(): Int {
@@ -50,6 +47,7 @@ class InspectionFlowAdapter(fragmentManager: FragmentManager,var leadData: LeadD
             29 ->  return ListNameDataFragment.newInstance(null,null, "ListName",26,false,3)
             30 ->  return ListNameDataFragment.newInstance(null,null, "ListName",26,false,4)
             31 ->  return ListNameDataFragment.newInstance(null,null, "ListName",26,false,5)
+            32 ->  return VideoFragment.newInstance();
           /*  0 ->  return FirstFragment.newInstance("Email Id",leadData.eMAIL_ID, "String",0)
             0 ->  return FirstFragment.newInstance("Email Id",leadData.eMAIL_ID, "String",0)
             0 ->  return FirstFragment.newInstance("Email Id",leadData.eMAIL_ID, "String",0)

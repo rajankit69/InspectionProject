@@ -38,4 +38,13 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="validation_code">Validation code</string>
+    <string name="permission_request">This app needs permission for camera and audio recording.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="message_need_permission">Need Permissions</string>
+    <string name="message_permission">This app needs permission to use this feature. You can grant them in app settings.</string>
+    <string name="title_go_to_setting">GOTO SETTINGS</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="play_stop">Play or Stop</string>
+    <string name="please_denied_to_read_your_external_storage">Permission is denied.Please allow permission for store image</string>
 </resources>

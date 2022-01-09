@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CarInspection"
 include ':app'
+include ':cropper'

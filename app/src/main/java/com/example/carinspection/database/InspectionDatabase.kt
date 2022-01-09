@@ -6,19 +6,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.carinspection.model.Converts
-import com.example.carinspection.model.InspectionData
-import com.example.carinspection.model.LeadData
-import com.example.carinspection.model.ListNameData
+import com.example.carinspection.model.*
 
-@Database(entities = [LeadData::class, InspectionData::class,ListNameData::class], version = 3, exportSchema = false)
+@Database(entities = [LeadData::class, InspectionData::class,ListNameData::class], version = 5, exportSchema = false)
 @TypeConverters(Converts::class)
 abstract class InspectionDatabase : RoomDatabase() {
 
     abstract val listNameDataDao: ListNameDataDao
     abstract val leadDataDao: LeadDataDao
     abstract val inspectionDataDao: InspectionAnswerDao
-
 
     companion object {
 

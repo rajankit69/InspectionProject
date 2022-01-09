@@ -7,14 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.carinspection.R
 import com.example.carinspection.database.InspectionDatabase
 import com.example.carinspection.databinding.FragmentListNameDataBinding
-import com.example.carinspection.databinding.LoginLayoutBinding
-import com.example.carinspection.model.LeadData
+import com.example.carinspection.model.InspectionData
 import com.example.carinspection.model.ListNameData
+import com.example.carinspection.model.ListNameValue
+import com.example.carinspection.util.AppHelper
+import com.example.carinspection.util.Constants
 import com.example.carinspection.view.adapter.AdapterRadioQuestion
-import com.example.carinspection.view.adapter.InspectionListAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,42 +22,43 @@ import java.lang.Thread.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "question"
-private const val ARG_PARAM2 = "answer"
-private const val ARG_PARAM3 = "screenNumber"
-private const val ARG_PARAM4 = "isEditable"
-private const val ARG_PARAM5 = "objectType"
-private const val ARG_PARAM6 = "listDataNumber"
+
 
 /**
  * A simple [Fragment] subclass.
  * Use the [ListNameDataFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+private const val LIST_DATA_NUMBER = "listDataNumber"
+
 class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnItem {
-    private lateinit var listNameDataList: List<ListNameData>
-    private lateinit var mContext: Context
+    private var inspectionData: InspectionData? = null
+    private  var listNameDataList: List<ListNameData>?=null
+    private  var mContext: Context?=null
     private  var adapterRadioQuestion: AdapterRadioQuestion?=null
+    private var listNameValue : ListNameValue?=null
+    var fragmentInterfacer: ListNameDataFragmentInterface? = null
+
 
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private var param3: Int = 0
-    private var param4: Boolean = false
-    private var param5: String? = null
-    private var param6: Int = 0
+    private var question: String? = null
+    private var answer: String? = null
+    private var screenNumber: Int = 0
+    private var isEditable: Boolean = false
+    private var objectType: String? = null
+    private var listDataNumber: Int = 0
 
     private var listNameDataBinding: FragmentListNameDataBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-            param3 = it.getInt(ARG_PARAM3)
-            param4 = it.getBoolean(ARG_PARAM4)
-            param5 = it.getString(ARG_PARAM5)
-            param6 = it.getInt(ARG_PARAM6)
+            question = it.getString(Constants.QUESTION)
+            answer = it.getString(Constants.ANSWER)
+            screenNumber = it.getInt(Constants.SCREEN_NUMBER)
+            isEditable = it.getBoolean(Constants.IS_EDITABLE)
+            objectType = it.getString(Constants.OBJECT_TYPE)
+            listDataNumber = it.getInt(LIST_DATA_NUMBER)
 
         }
     }
@@ -73,7 +74,7 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
     }
     private fun setView() {
         launch {
-            listNameDataList = InspectionDatabase.getInstance(mContext).listNameDataDao.getAll()
+            listNameDataList = mContext?.let { InspectionDatabase.getInstance(it).listNameDataDao.getAll() }
             CoroutineScope(Dispatchers.Main).launch {
                 updateUi()
             }
@@ -87,11 +88,13 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
     }*/
     private fun updateUi() {
         adapterRadioQuestion =
-            AdapterRadioQuestion(
-                activity,
-                listNameDataList.get(param6).LIST_NAME_VALUES,
-                this@ListNameDataFragment
-            )
+            listNameDataList?.get(listDataNumber)?.LIST_NAME_VALUES?.let {
+                AdapterRadioQuestion(
+                    activity,
+                    it,
+                    this@ListNameDataFragment
+                )
+            }
 
         // attach adapter to the recycler view
         listNameDataBinding?.rvRadioBtnAns?.layoutManager =
@@ -101,8 +104,8 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
                 false
             )
         listNameDataBinding?.rvRadioBtnAns?.adapter = adapterRadioQuestion
-        listNameDataBinding?.txtHeaderName?.text = listNameDataList?.get(param6)?.LIST_NAME
-       listNameDataBinding?.txtSubHeaderName?.text = listNameDataList?.get(param6)?.LIST_NAME_DESCRIPTION
+        listNameDataBinding?.txtHeaderName?.text = listNameDataList?.get(listDataNumber)?.LIST_NAME
+       listNameDataBinding?.txtSubHeaderName?.text = listNameDataList?.get(listDataNumber)?.LIST_NAME_DESCRIPTION
 
    }
 
@@ -133,17 +136,31 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
                         isEditable: Boolean,listDataNumber: Int) =
             ListNameDataFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, question)
-                    putString(ARG_PARAM2, answer)
-                    putInt(ARG_PARAM3, screenNumber)
-                    putBoolean(ARG_PARAM4, isEditable)
-                    putString(ARG_PARAM5, objectType)
-                    putInt(ARG_PARAM6, listDataNumber)
+                    putString(Constants.QUESTION, question)
+                    putString(Constants.ANSWER, answer)
+                    putInt(Constants.SCREEN_NUMBER, screenNumber)
+                    putBoolean(Constants.IS_EDITABLE, isEditable)
+                    putString(Constants.OBJECT_TYPE, objectType)
+                    putInt(LIST_DATA_NUMBER, listDataNumber)
                 }
             }
     }
 
-    override fun onClickItem(position: Int) {
-        TODO("Not yet implemented")
+    override fun onClickItem(listNameValueData: ListNameValue) {
+        listNameValue = listNameValueData
+    }
+    interface ListNameDataFragmentInterface {
+
+        fun sendDataToActivity(inspectionData: InspectionData)
+    }
+    fun getData() {
+        if (checkValidationManadatory()) {
+            inspectionData?.let { fragmentInterfacer?.sendDataToActivity(it) }
+        }
+    }
+
+    private fun checkValidationManadatory(): Boolean {
+        inspectionData = InspectionData(AppHelper.convertToString(listNameValue),screenNumber , Constants.LIST_DATA, false)
+        return true
     }
 }

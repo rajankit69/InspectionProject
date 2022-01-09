@@ -7,12 +7,21 @@
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/expand_more.xml" value="0.19479166666666667" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/expand_more_background.xml" value="0.19479166666666667" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/expand_more_foreground.xml" value="0.19479166666666667" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/ic_play_button.xml" value="0.13703703703703704" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/ic_record.xml" value="0.13703703703703704" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/drawable/ic_stop.xml" value="0.13703703703703704" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/activity_insception_list.xml" value="0.17864583333333334" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/activity_inspection_flow.xml" value="0.10099637681159421" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/activity_record_video_posts.xml" value="0.17708333333333334" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/activity_record_video_posts2.xml" value="0.16458333333333333" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/forgotpassword_layout.xml" value="0.1" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_camera.xml" value="0.18" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_camera_video_player.xml" value="0.17864583333333334" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_list_name_data.xml" value="0.25" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_review.xml" value="0.1" />
-        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_upload_image.xml" value="0.22" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_upload_image.xml" value="0.18" />
+        <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/fragment_video.xml" value="0.17864583333333334" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/inception_row_layout.xml" value="0.25" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/login_layout.xml" value="0.1" />
         <entry key="..\:/AndroidProject/CarInspection/app/src/main/res/layout/question_radio_layout.xml" value="0.25" />

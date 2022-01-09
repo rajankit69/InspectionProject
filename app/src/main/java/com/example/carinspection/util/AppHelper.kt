@@ -1,6 +1,9 @@
 package com.example.carinspection.util
 
 import android.os.Build
+import com.example.carinspection.model.ListNameValue
+import com.example.carinspection.model.UploadImageData
+import com.google.gson.Gson
 import java.net.InetAddress
 
 import java.util.Collections
@@ -17,7 +20,6 @@ import kotlin.experimental.and
 
 
 class AppHelper {
-
     companion object {
         fun osName(): String {
            return "Android"
@@ -26,8 +28,22 @@ class AppHelper {
             return Build.VERSION.SDK_INT;
         }
 
+       fun convertToString(obj : Any?):String
+       {
+           val gson = Gson()
+           return gson.toJson(obj)
+       }
 
-
+        fun convertStringToUploadObject(json: String) : UploadImageData
+        {
+            val gson = Gson()
+             return gson.fromJson(json, UploadImageData::class.java)
+        }
+        fun convertStringToListNameDataObject(json: String) : ListNameValue
+        {
+            val gson = Gson()
+            return gson.fromJson(json, ListNameValue::class.java)
+        }
 
         /**
          * Returns MAC address of the given interface name.

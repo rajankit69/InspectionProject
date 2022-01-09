@@ -33,6 +33,7 @@ class InspectionFlowActivity : BaseActivity(), View.OnClickListener,FirstFragmen
     private var appBarConfiguration: AppBarConfiguration? = null
     private var binding: ActivityInspectionFlowBinding? = null
     private  var inspectionDataList : ArrayList<InspectionData> = ArrayList()
+    private  var uploadImageDataList : ArrayList<UploadImageData> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +86,7 @@ class InspectionFlowActivity : BaseActivity(), View.OnClickListener,FirstFragmen
         leadId = intent.getIntExtra(LEAD_ID,0)
         launch {
             leadId?.let {
-                leadData =    InspectionDatabase.getInstance(this@InspectionFlowActivity).leadDataDao.findSingleLeadData(it)
+                leadData = InspectionDatabase.getInstance(this@InspectionFlowActivity).leadDataDao.findSingleLeadData(it)
                 setupFlow()
             }
         }

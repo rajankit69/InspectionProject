@@ -2,7 +2,6 @@ package com.example.carinspection.database
 
 import androidx.room.*
 import com.example.carinspection.model.InspectionData
-import com.example.carinspection.model.LeadData
 
 @Dao
 interface InspectionAnswerDao {
@@ -24,7 +23,7 @@ interface InspectionAnswerDao {
     fun update(inspectionData: InspectionData?)
 
     @Delete
-    fun delete(inspectionData: LeadData?)
+    fun delete(inspectionData: InspectionData?)
 
     @Delete
     fun deleteAll(inspectionData: List<InspectionData?>?)

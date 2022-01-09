@@ -22,7 +22,6 @@ val onclickItemClickListener: AdapterRadioQuestion.ClickListnerOnItem
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
             holder.binding.radQuestionOption.text = list_name_value.get(position).LIST_NAME_VALUE
             holder.binding.radQuestionOption.setOnClickListener {
-                holder.binding.radQuestionOption.text = "kjskk"
                 list_name_value.get(position)?.DEFAULT_REMARK_IF_SELECTED?.let {
                     if (!it.isEmpty ()) {
                         holder.binding.defaultRemarkTextView.text =
@@ -30,7 +29,7 @@ val onclickItemClickListener: AdapterRadioQuestion.ClickListnerOnItem
                     }
                 }
               list_name_value.get(position).isSelected = true
-               onclickItemClickListener.onClickItem(position)
+               onclickItemClickListener.onClickItem(list_name_value.get(position))
             }
     }
 
@@ -40,7 +39,7 @@ val onclickItemClickListener: AdapterRadioQuestion.ClickListnerOnItem
 
     interface ClickListnerOnItem {
 
-        fun onClickItem(position: Int)
+        fun onClickItem(listNameValue: ListNameValue)
     }
 
     override fun getItemCount(): Int {

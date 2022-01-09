@@ -32,7 +32,9 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationCallback
 import android.location.LocationManager
 import com.example.carinspection.util.SharedPrefrenceHelper
+import com.example.carinspection.view.fragment.CameraFragment
 import com.example.carinspection.view.fragment.PinValidationFragment
+import com.example.carinspection.view.fragment.VideoFragment
 
 
 class LoginSignUpActivity : AppCompatActivity() {

@@ -1,9 +1,11 @@
 package com.example.carinspection.view.fragment
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -13,16 +15,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.content.PermissionChecker.checkPermission
+import com.bumptech.glide.Glide
 import com.example.carinspection.BuildConfig
 import com.example.carinspection.R
+import com.example.carinspection.database.InspectionDatabase
 import com.example.carinspection.databinding.FragmentUploadImageBinding
-import com.example.carinspection.databinding.LoginLayoutBinding
 import com.example.carinspection.model.InspectionData
+import com.example.carinspection.model.UploadImageData
+import com.example.carinspection.util.AppHelper
+import com.example.carinspection.util.Constants
+import com.google.gson.Gson
+import com.theartofdev.edmodo.cropper.CropImage
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
@@ -31,24 +37,25 @@ import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "documentType"
-private const val ARG_PARAM2 = "id"
-private const val ARG_PARAM3 = "idType"
-private const val ARG_PARAM4 = "screenNumber"
-private const val ARG_PARAM5 = "objectType"
+private const val documentType = "documentType"
+private const val id = "id"
+private const val idType = "idType"
+private const val screenNumber = "screenNumber"
+private const val objectType = "objectType"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [UploadImageFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class UploadImageFragment : Fragment() {
+class UploadImageFragment : BaseFragment() {
+    private  var uploadImageData: UploadImageData?=null
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private var param3: String? = null
-    private var param4: Int? = null
-    private var param5: String? = null
+    private var documentType: String? = null
+    private var id: String? = null
+    private var idType: String? = null
+    private var screenNumber: Int? = null
+    private var objectType: String? = null
     var inspectionData: InspectionData? = null
     var fragmentInterfacer: UploadImageFragmentInterface? = null
     private var fragmentUploadImageBinding: FragmentUploadImageBinding? = null
@@ -58,16 +65,17 @@ class UploadImageFragment : Fragment() {
     val REQUEST_CODE_TAKE_PICTURE = 0x2
     var mCurrentPhotoPath: String? = null
     private var mFileTemp: File? = null
+    var path : String?= ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-            param3 = it.getString(ARG_PARAM3)
-            param4 = it.getInt(ARG_PARAM4)
-            param5 = it.getString(ARG_PARAM5)
+            documentType = it.getString(com.example.carinspection.view.fragment.documentType)
+            id = it.getString(id)
+            idType = it.getString(com.example.carinspection.view.fragment.idType)
+            screenNumber = it.getInt(com.example.carinspection.view.fragment.screenNumber)
+            objectType = it.getString(com.example.carinspection.view.fragment.objectType)
 
         }
     }
@@ -95,11 +103,11 @@ class UploadImageFragment : Fragment() {
 
     private fun init() {
         fragmentUploadImageBinding?.run {
-            title.text="Upload picture $param1"
-            llUploadCamra?.setOnClickListener(View.OnClickListener {
+            title.text="Upload picture $documentType"
+            imgCamera?.setOnClickListener(View.OnClickListener {
                 if (!hasPermissions(context, *PERMISSIONS)
                 ) {
-                    requestPermissionLauncher.launch(PERMISSIONS)
+                    requestPermissions(PERMISSIONS, PERMISSION_ALL)
                 } else {
                     dispatchTakePictureIntent()
                 }
@@ -201,13 +209,13 @@ class UploadImageFragment : Fragment() {
         fun newInstance(documentType: String, id: String?,idType: String?,screenNumber:Int,objectType:String) =
             UploadImageFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, documentType)
+                    putString(com.example.carinspection.view.fragment.documentType, documentType)
                     id?.let {
-                        putString(ARG_PARAM2, id)
-                        putString(ARG_PARAM3, idType)
+                        putString(com.example.carinspection.view.fragment.id, id)
+                        putString(com.example.carinspection.view.fragment.idType, idType)
                     }
-                    putInt(ARG_PARAM4,screenNumber)
-                    putString(ARG_PARAM5,objectType)
+                    putInt(com.example.carinspection.view.fragment.screenNumber,screenNumber)
+                    putString(com.example.carinspection.view.fragment.objectType,objectType)
 
                 }
             }
@@ -219,57 +227,85 @@ class UploadImageFragment : Fragment() {
     }
 
     private fun checkValidationManadatory(): Boolean {
-        inspectionData =
-            111?.let { InspectionData("ajhjha",param4 , "jksjk", true, it) }
+        inspectionData = InspectionData(AppHelper.convertToString(uploadImageData), screenNumber, Constants.UPLOAD_IMAGE, false)
          return true
     }
 
-    val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            // Handle Permission granted/rejected
-            permissions.entries.forEach {
-                val permissionName = it.key
-                val isGranted = it.value
-                if (isGranted) {
-                    // Permission is granted
-                    dispatchTakePictureIntent()
-                } else {
-                    // Permission is denied
-                }
-            }
-        }
-        }
 
-/* override  fun onRequestPermissionsResult(
+
+    override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<String?>?, grantResults: IntArray
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         when (requestCode) {
-            PERMISSION_ALL -> {
-
-
+           PERMISSION_ALL -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                 *//*   if (isCutout) {
-                        showCutImageDialog()
-                    } else if (isReuploaded) {
-                        selectImage()
-                    } else if (isGallerySelected) {
-                        openGallery()
-                    } else {*//*
-                        dispatchTakePictureIntent()
-                   // }
+
+                    dispatchTakePictureIntent()
+
                 } else {
                     Toast.makeText(
                         context,
-                        "Please allow to external storage ",
+                        getString(R.string.please_denied_to_read_your_external_storage),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 return
             }
         }
-    }*/
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+          REQUEST_CODE_TAKE_PICTURE -> if (resultCode == Activity.RESULT_OK) {
+                try {
+                    croptImage()
+                } catch (e: Exception) {
+                }
+            }
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                val result = CropImage.getActivityResult(data)
+                var resultUri: Uri? = null
+                if (resultCode == Activity.RESULT_OK) {
+                    resultUri = result.uri
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    val error = result.error
+                }
+                try {
+                    path = resultUri?.path
+                    if (path == null) {
+                        return
+                    }
+                    fragmentUploadImageBinding?.imageView?.let {
+                        Glide.with(this)
+                            .load(File(path))
+                            .centerCrop()
+                            .into(it)
+                    }
+                    fragmentUploadImageBinding?.imageView?.visibility = View.VISIBLE
+
+                    uploadImageData = UploadImageData(path,documentType,documentType,Calendar.getInstance().getTime().toString())
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+    }
+
+    private fun croptImage() {
+        context?.let {
+            CropImage.activity(Uri.fromFile(mFileTemp))
+                .setInitialCropWindowPaddingRatio(0f).start(it, this)
+        }
+
+    }
+
+}
+
 

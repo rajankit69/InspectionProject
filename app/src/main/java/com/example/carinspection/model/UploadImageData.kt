@@ -1,3 +1,7 @@
 package com.example.carinspection.model
 
-data class UploadImageData(var imageUrl: String,var imageType:String,var imageName:String,var imageDate : String)
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+data class UploadImageData(var imagePath: String?, var imageType:String?,var imageName:String?,var imageDate : String?)
