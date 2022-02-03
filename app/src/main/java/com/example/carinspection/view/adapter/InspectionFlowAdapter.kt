@@ -9,13 +9,13 @@ import com.example.carinspection.view.fragment.*
 
 class InspectionFlowAdapter(fragmentManager: FragmentManager,var leadData: LeadData,var listNameDataList: List<ListNameData>):FragmentPagerAdapter(fragmentManager,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getCount(): Int {
-        return 31
+        return 33
     }
 
     override fun getItem(position: Int): Fragment {
         when (position)
         {
-          0 ->  return FirstFragment.newInstance("Schedule Date and Time",leadData.sCHEDULED_DATE_TIME, "String",0,true)
+            0 ->  return FirstFragment.newInstance("Schedule Date and Time",leadData.sCHEDULED_DATE_TIME, "String",0,true)
             1 ->  return FirstFragment.newInstance("Email Id",leadData.eMAIL_ID, "String",1,true)
             2 ->  return FirstFragment.newInstance("Phone Number",leadData.pHONE_NUMBER, "String",2,true)
             3 ->  return FirstFragment.newInstance("Email Id",leadData.eMAIL_ID, "String",3,true)
@@ -47,7 +47,7 @@ class InspectionFlowAdapter(fragmentManager: FragmentManager,var leadData: LeadD
             29 ->  return ListNameDataFragment.newInstance(null,null, "ListName",26,false,3)
             30 ->  return ListNameDataFragment.newInstance(null,null, "ListName",26,false,4)
             31 ->  return ListNameDataFragment.newInstance(null,null, "ListName",26,false,5)
-            32 ->  return VideoFragment.newInstance();
+            32 ->  return CameraFragment.newInstance("","","",27,"Video")
           /*  0 ->  return FirstFragment.newInstance("Email Id",leadData.eMAIL_ID, "String",0)
             0 ->  return FirstFragment.newInstance("Email Id",leadData.eMAIL_ID, "String",0)
             0 ->  return FirstFragment.newInstance("Email Id",leadData.eMAIL_ID, "String",0)

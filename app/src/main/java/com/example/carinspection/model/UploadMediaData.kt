@@ -4,4 +4,4 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-data class UploadImageData(var imagePath: String?, var imageType:String?,var imageName:String?,var imageDate : String?)
+data class UploadMediaData(var path: String?, var mediaType:String?, var mediaName:String?, var imageDate : String?)

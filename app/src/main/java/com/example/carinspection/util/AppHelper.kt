@@ -2,21 +2,13 @@ package com.example.carinspection.util
 
 import android.os.Build
 import com.example.carinspection.model.ListNameValue
-import com.example.carinspection.model.UploadImageData
+import com.example.carinspection.model.UploadMediaData
 import com.google.gson.Gson
 import java.net.InetAddress
 
 import java.util.Collections
 
 import java.net.NetworkInterface
-
-import java.io.ByteArrayOutputStream
-
-import java.io.FileInputStream
-
-import java.io.BufferedInputStream
-import java.io.IOException
-import kotlin.experimental.and
 
 
 class AppHelper {
@@ -27,17 +19,17 @@ class AppHelper {
         fun osVersionName(): Int {
             return Build.VERSION.SDK_INT;
         }
-
+       @JvmStatic
        fun convertToString(obj : Any?):String
        {
            val gson = Gson()
            return gson.toJson(obj)
        }
 
-        fun convertStringToUploadObject(json: String) : UploadImageData
+        fun convertStringToUploadObject(json: String) : UploadMediaData
         {
             val gson = Gson()
-             return gson.fromJson(json, UploadImageData::class.java)
+             return gson.fromJson(json, UploadMediaData::class.java)
         }
         fun convertStringToListNameDataObject(json: String) : ListNameValue
         {

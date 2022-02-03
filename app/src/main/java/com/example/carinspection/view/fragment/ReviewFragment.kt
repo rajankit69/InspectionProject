@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.carinspection.R
+import com.example.carinspection.databinding.FragmentFirstBinding
+import com.example.carinspection.databinding.FragmentReviewBinding
+import com.example.carinspection.view.adapter.ReviewAdapter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,8 +20,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ReviewFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ReviewFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+class ReviewFragment : Fragment(),ReviewAdapter.ClickListnerOnItem {
+    private var databinding: FragmentReviewBinding? = null
     private var param1: String? = null
     private var param2: String? = null
 
@@ -34,8 +37,8 @@ class ReviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_review, container, false)
+        databinding = FragmentReviewBinding.inflate(inflater, container, false)
+        return databinding?.root
     }
 
     companion object {
@@ -56,5 +59,9 @@ class ReviewFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun reviewEdit(position: Int) {
+
     }
 }

@@ -1,5 +1,7 @@
 package com.example.carinspection.view.fragment;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,11 +17,15 @@ import androidx.annotation.NonNull;
 
 import com.example.carinspection.R;
 import com.example.carinspection.databinding.FragmentCameraBinding;
+import com.example.carinspection.model.InspectionData;
+import com.example.carinspection.model.UploadMediaData;
+import com.example.carinspection.util.AppHelper;
 import com.example.carinspection.util.AutoFitTextureView;
 import com.example.carinspection.util.Constants;
 import com.example.carinspection.util.SimpleCountDownTimer;
 
 import java.io.File;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,8 +45,11 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
     private String documentType;
     private String id;
     private String idType;
-    private String screenNumber;
+    private int screenNumber;
     private String objectType;
+    private OnFragmentInteractionListener mListener;
+    private InspectionData inspectionData;
+    private UploadMediaData uploadMediaData;
 
     public CameraFragment() {
         // Required empty public constructor
@@ -73,7 +82,7 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
             documentType = bundle.getString(Constants.DOCUMENT_TYPE);
             id = bundle.getString(Constants.ID);
             idType = bundle.getString(Constants.ID_TYPE);
-            screenNumber = bundle.getString(Constants.SCREEN_NUMBER);
+            screenNumber = bundle.getInt(Constants.SCREEN_NUMBER);
             objectType = bundle.getString(Constants.OBJECT_TYPE);
         }
 
@@ -117,15 +126,16 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
                 binding.mPlayVideo.setVisibility(View.GONE);
             }
             });
-        binding.Upload.setOnClickListener(new View.OnClickListener() {
+      /*  binding.Upload.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
                 binding.mVideoView.start();
                 binding.mPlayVideo.setVisibility(View.GONE);
+
             }
-        });
+        });*/
         binding.ReTake.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -249,4 +259,31 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentCallMethodtoActivity");
+        }
+    }
+
+    public interface OnFragmentInteractionListener {
+        void  sendDataToActivity(InspectionData inspectionData);
+    }
+   public void getData() {
+        if (checkValidationManadatory()) {
+            uploadMediaData = new UploadMediaData(mOutputFilePath,Constants.VIDEO,documentType, Calendar.getInstance().getTime().toString());
+            mListener.sendDataToActivity(inspectionData);
+        }
+
+    }
+    private Boolean checkValidationManadatory() {
+        inspectionData = new InspectionData(AppHelper.convertToString(uploadMediaData), screenNumber, Constants.UPLOAD_IMAGE, false,0);
+        return true;
+    }
+
 }

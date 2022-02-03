@@ -4,10 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.carinspection.R
 import com.example.carinspection.api.ApiClient
 import com.example.carinspection.database.InspectionDatabase
@@ -15,15 +13,16 @@ import com.example.carinspection.databinding.ActivityInspectionFlowBinding
 import com.example.carinspection.model.*
 import com.example.carinspection.util.SharedPrefrenceHelper
 import com.example.carinspection.view.adapter.InspectionFlowAdapter
-import com.example.carinspection.view.adapter.InspectionListAdapter
+import com.example.carinspection.view.fragment.CameraFragment
 import com.example.carinspection.view.fragment.FirstFragment
+import com.example.carinspection.view.fragment.ListNameDataFragment
 import com.example.carinspection.view.fragment.UploadImageFragment
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class InspectionFlowActivity : BaseActivity(), View.OnClickListener,FirstFragment.FirstFragmentInterface,UploadImageFragment.UploadImageFragmentInterface {
+class InspectionFlowActivity : BaseActivity(), View.OnClickListener,FirstFragment.FirstFragmentInterface,UploadImageFragment.UploadImageFragmentInterface,ListNameDataFragment.ListNameDataFragmentInterface,CameraFragment.OnFragmentInteractionListener {
 
     private var step: Int? = 0
     private var leadId : Int?=0
@@ -33,7 +32,7 @@ class InspectionFlowActivity : BaseActivity(), View.OnClickListener,FirstFragmen
     private var appBarConfiguration: AppBarConfiguration? = null
     private var binding: ActivityInspectionFlowBinding? = null
     private  var inspectionDataList : ArrayList<InspectionData> = ArrayList()
-    private  var uploadImageDataList : ArrayList<UploadImageData> = ArrayList()
+    private  var uploadMediaDataList : ArrayList<UploadMediaData> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,6 +146,14 @@ class InspectionFlowActivity : BaseActivity(), View.OnClickListener,FirstFragmen
             {
                 val uploadImageFragment = page
                 uploadImageFragment.getData()
+            }else if(page is ListNameDataFragment)
+            {
+                val listNameDataFragment = page
+                listNameDataFragment.getData()
+            }else if(page is CameraFragment)
+            {
+                val cameraFragment = page
+                cameraFragment.getData()
             }
         }
     }
@@ -155,7 +162,7 @@ class InspectionFlowActivity : BaseActivity(), View.OnClickListener,FirstFragmen
         inspectionDataList.add(inspectionData)
         step = step?.plus(1)
         step?.let {
-            if (it < 31) {
+            if (it < 34) {
                 binding?.viewPager?.setCurrentItem(it)
             }
         }

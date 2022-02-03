@@ -1,5 +1,6 @@
 package com.example.carinspection.view.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -162,5 +163,11 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
     private fun checkValidationManadatory(): Boolean {
         inspectionData = InspectionData(AppHelper.convertToString(listNameValue),screenNumber , Constants.LIST_DATA, false)
         return true
+    }
+
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        fragmentInterfacer = context as ListNameDataFragmentInterface
+
     }
 }

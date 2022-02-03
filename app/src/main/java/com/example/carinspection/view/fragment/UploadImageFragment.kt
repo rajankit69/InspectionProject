@@ -20,15 +20,12 @@ import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.example.carinspection.BuildConfig
 import com.example.carinspection.R
-import com.example.carinspection.database.InspectionDatabase
 import com.example.carinspection.databinding.FragmentUploadImageBinding
 import com.example.carinspection.model.InspectionData
-import com.example.carinspection.model.UploadImageData
+import com.example.carinspection.model.UploadMediaData
 import com.example.carinspection.util.AppHelper
 import com.example.carinspection.util.Constants
-import com.google.gson.Gson
 import com.theartofdev.edmodo.cropper.CropImage
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
@@ -49,7 +46,7 @@ private const val objectType = "objectType"
  * create an instance of this fragment.
  */
 class UploadImageFragment : BaseFragment() {
-    private  var uploadImageData: UploadImageData?=null
+    private  var uploadMediaData: UploadMediaData?=null
     // TODO: Rename and change types of parameters
     private var documentType: String? = null
     private var id: String? = null
@@ -227,7 +224,7 @@ class UploadImageFragment : BaseFragment() {
     }
 
     private fun checkValidationManadatory(): Boolean {
-        inspectionData = InspectionData(AppHelper.convertToString(uploadImageData), screenNumber, Constants.UPLOAD_IMAGE, false)
+        inspectionData = InspectionData(AppHelper.convertToString(uploadMediaData), screenNumber, Constants.UPLOAD_IMAGE, false)
          return true
     }
 
@@ -288,7 +285,7 @@ class UploadImageFragment : BaseFragment() {
                     }
                     fragmentUploadImageBinding?.imageView?.visibility = View.VISIBLE
 
-                    uploadImageData = UploadImageData(path,documentType,documentType,Calendar.getInstance().getTime().toString())
+                    uploadMediaData = UploadMediaData(path,documentType,documentType,Calendar.getInstance().getTime().toString())
 
                 } catch (e: Exception) {
                     e.printStackTrace()
