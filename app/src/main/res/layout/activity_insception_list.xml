@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray_color"
     tools:context=".view.activity.InsceptionListActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -43,6 +42,7 @@
         android:id="@+id/rvList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/light_gray_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

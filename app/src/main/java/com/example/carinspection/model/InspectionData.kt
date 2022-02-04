@@ -6,7 +6,10 @@ import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "answer_table")
-data class InspectionData(@ColumnInfo(name = "Answer")
+data class InspectionData(
+                         @ColumnInfo(name = "Question")
+                         var question: String?=null,
+                         @ColumnInfo(name = "Answer")
                           var answer: String?=null,
                           @ColumnInfo(name = "screenNo")
                           var screenNo: Int ?=0,

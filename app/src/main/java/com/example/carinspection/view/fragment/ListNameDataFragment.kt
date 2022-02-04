@@ -161,7 +161,7 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
     }
 
     private fun checkValidationManadatory(): Boolean {
-        inspectionData = InspectionData(AppHelper.convertToString(listNameValue),screenNumber , Constants.LIST_DATA, false)
+        inspectionData = InspectionData(listNameValue?.LIST_NAME_VALUE,AppHelper.convertToString(listNameValue),screenNumber , Constants.LIST_DATA, false)
         return true
     }
 

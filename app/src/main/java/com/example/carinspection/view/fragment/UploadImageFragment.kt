@@ -224,7 +224,7 @@ class UploadImageFragment : BaseFragment() {
     }
 
     private fun checkValidationManadatory(): Boolean {
-        inspectionData = InspectionData(AppHelper.convertToString(uploadMediaData), screenNumber, Constants.UPLOAD_IMAGE, false)
+        inspectionData = InspectionData(documentType,AppHelper.convertToString(uploadMediaData), screenNumber, Constants.UPLOAD_IMAGE, false)
          return true
     }
 

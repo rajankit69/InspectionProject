@@ -50,6 +50,7 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
     private OnFragmentInteractionListener mListener;
     private InspectionData inspectionData;
     private UploadMediaData uploadMediaData;
+    private String question;
 
     public CameraFragment() {
         // Required empty public constructor
@@ -61,12 +62,13 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
      */
 
 
-    public static CameraFragment newInstance(String documentType,String id,String idType,int screenNumber,String objectType) {
+    public static CameraFragment newInstance(String question,String documentType,String id,String idType,int screenNumber,String objectType) {
         CameraFragment fragment = new CameraFragment();
         Bundle args = new Bundle();
+        args.putString(Constants.QUESTION,question);
         args.putString(Constants.DOCUMENT_TYPE,documentType);
-        args.putString(Constants.ID,documentType);
-        args.putString(Constants.ID_TYPE,documentType);
+        args.putString(Constants.ID,id);
+        args.putString(Constants.ID_TYPE,idType);
         args.putInt(Constants.SCREEN_NUMBER,screenNumber);
         args.putString(Constants.OBJECT_TYPE,objectType);
 
@@ -79,6 +81,7 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if(bundle != null) {
+            question = bundle.getString(Constants.QUESTION);
             documentType = bundle.getString(Constants.DOCUMENT_TYPE);
             id = bundle.getString(Constants.ID);
             idType = bundle.getString(Constants.ID_TYPE);
@@ -282,7 +285,7 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
 
     }
     private Boolean checkValidationManadatory() {
-        inspectionData = new InspectionData(AppHelper.convertToString(uploadMediaData), screenNumber, Constants.UPLOAD_IMAGE, false,0);
+        inspectionData = new InspectionData(question,AppHelper.convertToString(uploadMediaData), screenNumber, Constants.VIDEO, false,0);
         return true;
     }
 

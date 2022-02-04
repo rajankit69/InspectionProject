@@ -2,14 +2,17 @@ package com.example.carinspection.view.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.text.set
+import com.example.carinspection.database.InspectionDatabase
 import com.example.carinspection.databinding.FragmentFirstBinding
 import com.example.carinspection.model.InspectionData
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +27,7 @@ private const val ARG_PARAM5 = "objectType"
  * Use the [FirstFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FirstFragment : Fragment() {
+class FirstFragment : BaseFragment() {
     private var databinding: FragmentFirstBinding? = null
 
     // TODO: Rename and change types of parameters
@@ -93,6 +96,16 @@ class FirstFragment : Fragment() {
 
     fun getData() {
         if (checkValidationManadatory()) {
+            launch {
+                context?.let {
+                    inspectionData?.let { it1 ->
+                        InspectionDatabase.getInstance(it).inspectionDataDao.insert(
+                            it1
+                        )
+                    }
+                }
+            }
+
             inspectionData?.let { fragmentInterfacer?.sendDataToActivity(it) }
         }
     }
@@ -104,7 +117,7 @@ class FirstFragment : Fragment() {
             Toast.makeText(context, param1, Toast.LENGTH_LONG).show()
             return false
         }
-        inspectionData = InspectionData(answer, param3?.toInt(), param5, param4)
+        inspectionData = InspectionData(param1,answer, param3?.toInt(), param5, param4)
         return ismanadatoryData
 
     }

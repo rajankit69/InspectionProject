@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.carinspection.model.*
 
-@Database(entities = [LeadData::class, InspectionData::class,ListNameData::class], version = 5, exportSchema = false)
+@Database(entities = [LeadData::class, InspectionData::class,ListNameData::class], version = 6, exportSchema = false)
 @TypeConverters(Converts::class)
 abstract class InspectionDatabase : RoomDatabase() {
 

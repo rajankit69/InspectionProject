@@ -3,6 +3,7 @@ package com.example.carinspection.view.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,6 +18,8 @@ import com.example.carinspection.view.fragment.CameraFragment
 import com.example.carinspection.view.fragment.FirstFragment
 import com.example.carinspection.view.fragment.ListNameDataFragment
 import com.example.carinspection.view.fragment.UploadImageFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -163,7 +166,12 @@ class InspectionFlowActivity : BaseActivity(), View.OnClickListener,FirstFragmen
         step = step?.plus(1)
         step?.let {
             if (it < 34) {
+
                 binding?.viewPager?.setCurrentItem(it)
+                if(it ==33) {
+                    binding?.uploadBtn?.visibility = View.VISIBLE
+                }
+
             }
         }
     }

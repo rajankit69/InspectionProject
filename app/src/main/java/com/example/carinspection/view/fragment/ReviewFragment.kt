@@ -1,14 +1,22 @@
 package com.example.carinspection.view.fragment
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.carinspection.R
+import com.example.carinspection.database.InspectionDatabase
 import com.example.carinspection.databinding.FragmentFirstBinding
 import com.example.carinspection.databinding.FragmentReviewBinding
+import com.example.carinspection.model.InspectionData
+import com.example.carinspection.view.adapter.AdapterRadioQuestion
 import com.example.carinspection.view.adapter.ReviewAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,10 +28,13 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ReviewFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ReviewFragment : Fragment(),ReviewAdapter.ClickListnerOnItem {
+class ReviewFragment : BaseFragment(),ReviewAdapter.ClickListnerOnItem {
+    private var inspectionDataList: List<InspectionData>? = null
+    private var reviewAdapter: ReviewAdapter?=null
     private var databinding: FragmentReviewBinding? = null
     private var param1: String? = null
     private var param2: String? = null
+    private var mcontext : Context? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +51,43 @@ class ReviewFragment : Fragment(),ReviewAdapter.ClickListnerOnItem {
         databinding = FragmentReviewBinding.inflate(inflater, container, false)
         return databinding?.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setView()
+    }
+    private fun setView() {
+        launch {
+            inspectionDataList = mcontext?.let { InspectionDatabase.getInstance(it).inspectionDataDao.getAll() }
+            CoroutineScope(Dispatchers.Main).launch {
+                updateUi()
+            }
+
+        }
+
+    }
+
+    private fun updateUi() {
+        reviewAdapter =
+            inspectionDataList?.let {
+                ReviewAdapter(
+                    mcontext,
+                    it,
+                    this@ReviewFragment
+                )
+            }
+
+        // attach adapter to the recycler view
+        databinding?.reviewRecyclerView?.layoutManager =
+            LinearLayoutManager(
+                mcontext,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+        databinding?.reviewRecyclerView?.adapter = reviewAdapter
+
+    }
+
 
     companion object {
         /**
@@ -59,6 +107,12 @@ class ReviewFragment : Fragment(),ReviewAdapter.ClickListnerOnItem {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mcontext = context
+
     }
 
     override fun reviewEdit(position: Int) {
