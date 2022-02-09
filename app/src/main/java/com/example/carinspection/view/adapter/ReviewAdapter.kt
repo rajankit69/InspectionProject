@@ -13,7 +13,7 @@ import com.example.carinspection.util.AppHelper
 import com.example.carinspection.util.Constants
 
 class ReviewAdapter(val activity: Context?,
-                    val inspectionData:  List<InspectionData>,
+                    val inspectionDatas:  List<InspectionData>,
                     val onclickItemClickListener: ClickListnerOnItem
 ) : RecyclerView.Adapter<ReviewAdapter.CustomViewHolder>() {
 
@@ -26,31 +26,29 @@ class ReviewAdapter(val activity: Context?,
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         with(holder) {
-            inspectionData?.get(position)?.let {
-                if(it.objectType?.equals(Constants.STRING_DATA) == true && it.editable ) {
-                    binding.titleTextView.text = it.question
-                    binding.contentTextView.text =  it?.answer
-                }else if(it.objectType?.equals(Constants.LIST_DATA) == true && it.editable){
-                  var listNameValue : ListNameValue? =  it.answer?.let { it1 -> AppHelper.convertStringToListNameDataObject(it1) }
+            inspectionDatas?.get(position)?.let {  inspectionData ->
+                if(inspectionData.objectType?.equals(Constants.STRING_DATA) == true && inspectionData.editable ) {
+                    binding.titleTextView.text = inspectionData.question
+                    binding.contentTextView.text =  inspectionData?.answer
+                    binding.optionalTextView.visibility = View.GONE
+                }else if(inspectionData.objectType?.equals(Constants.LIST_DATA) == true && inspectionData.editable){
+                  var listNameValue : ListNameValue? =  inspectionData.answer?.let { it1 -> AppHelper.convertStringToListNameDataObject(it1) }
                     binding.titleTextView.text = listNameValue?.LIST_NAME_VALUE
-                    binding.contentTextView.text =  it?.answer
+                    binding.contentTextView.text =  inspectionData?.answer
                     if(listNameValue?.DEFAULT_REMARK_IF_SELECTED!=null)
                     {
                         binding.optionalTextView.text = listNameValue?.DEFAULT_REMARK_IF_SELECTED
                         binding.optionalTextView.visibility = View.VISIBLE
+                    }else{
+                        binding.optionalTextView.visibility = View.GONE
                     }
 
                 }
 
-            }
-            binding.cardView?.setOnClickListener {
-                onclickItemClickListener.reviewEdit(position)
-            }
-            binding?.run {
 
-            }
             binding.editImageView.setOnClickListener {
-
+                onclickItemClickListener.reviewEdit( inspectionDatas?.get(adapterPosition))
+            }
             }
 
         }
@@ -59,11 +57,11 @@ class ReviewAdapter(val activity: Context?,
 
     interface ClickListnerOnItem {
 
-        fun reviewEdit(position: Int)
+        fun reviewEdit(inspectionData: InspectionData)
     }
 
     override fun getItemCount(): Int {
-        return 22
+        return inspectionDatas.size
     }
 
     class CustomViewHolder(val binding: ReviewRowLayoutBinding) :

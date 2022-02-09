@@ -17,5 +17,5 @@ data class InspectionData(
                           var objectType: String?=null,
                           @ColumnInfo(name = "editable")
                           var editable : Boolean,
-                          @PrimaryKey(autoGenerate = true)
-                          var dataId:Int=0)
+                          @PrimaryKey(autoGenerate = false)
+                          var dataId:Int)

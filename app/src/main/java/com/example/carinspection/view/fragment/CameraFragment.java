@@ -51,6 +51,7 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
     private InspectionData inspectionData;
     private UploadMediaData uploadMediaData;
     private String question;
+    private String inspectionId ;
 
     public CameraFragment() {
         // Required empty public constructor
@@ -62,7 +63,7 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
      */
 
 
-    public static CameraFragment newInstance(String question,String documentType,String id,String idType,int screenNumber,String objectType) {
+    public static CameraFragment newInstance(String question,String documentType,String id,String idType,int screenNumber,String objectType,String inspectionId) {
         CameraFragment fragment = new CameraFragment();
         Bundle args = new Bundle();
         args.putString(Constants.QUESTION,question);
@@ -71,6 +72,7 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
         args.putString(Constants.ID_TYPE,idType);
         args.putInt(Constants.SCREEN_NUMBER,screenNumber);
         args.putString(Constants.OBJECT_TYPE,objectType);
+        args.putString(Constants.INSPECTION_ID,inspectionId);
 
         fragment.setArguments(args);
         return fragment;
@@ -87,6 +89,7 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
             idType = bundle.getString(Constants.ID_TYPE);
             screenNumber = bundle.getInt(Constants.SCREEN_NUMBER);
             objectType = bundle.getString(Constants.OBJECT_TYPE);
+            inspectionId = bundle.getString(Constants.INSPECTION_ID);
         }
 
     }
@@ -244,7 +247,9 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        if(unbinder!=null) {
+            unbinder.unbind();
+        }
     }
 
     @Override
@@ -279,13 +284,13 @@ public class CameraFragment extends CameraVideoFragment implements SimpleCountDo
     }
    public void getData() {
         if (checkValidationManadatory()) {
-            uploadMediaData = new UploadMediaData(mOutputFilePath,Constants.VIDEO,documentType, Calendar.getInstance().getTime().toString());
             mListener.sendDataToActivity(inspectionData);
         }
 
     }
     private Boolean checkValidationManadatory() {
-        inspectionData = new InspectionData(question,AppHelper.convertToString(uploadMediaData), screenNumber, Constants.VIDEO, false,0);
+        uploadMediaData = new UploadMediaData(mOutputFilePath,Constants.VIDEO,documentType, Calendar.getInstance().getTime().toString());
+        inspectionData = new InspectionData(question,AppHelper.convertToString(uploadMediaData), screenNumber, Constants.VIDEO, false, Integer.valueOf(inspectionId));
         return true;
     }
 

@@ -20,12 +20,14 @@ import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.example.carinspection.BuildConfig
 import com.example.carinspection.R
+import com.example.carinspection.database.InspectionDatabase
 import com.example.carinspection.databinding.FragmentUploadImageBinding
 import com.example.carinspection.model.InspectionData
 import com.example.carinspection.model.UploadMediaData
 import com.example.carinspection.util.AppHelper
 import com.example.carinspection.util.Constants
 import com.theartofdev.edmodo.cropper.CropImage
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
@@ -34,11 +36,7 @@ import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val documentType = "documentType"
-private const val id = "id"
-private const val idType = "idType"
-private const val screenNumber = "screenNumber"
-private const val objectType = "objectType"
+
 
 /**
  * A simple [Fragment] subclass.
@@ -63,16 +61,18 @@ class UploadImageFragment : BaseFragment() {
     var mCurrentPhotoPath: String? = null
     private var mFileTemp: File? = null
     var path : String?= ""
+    var inspectionId : String?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            documentType = it.getString(com.example.carinspection.view.fragment.documentType)
-            id = it.getString(id)
-            idType = it.getString(com.example.carinspection.view.fragment.idType)
-            screenNumber = it.getInt(com.example.carinspection.view.fragment.screenNumber)
-            objectType = it.getString(com.example.carinspection.view.fragment.objectType)
+            documentType = it.getString(Constants.DOCUMENT_TYPE)
+            id = it.getString(Constants.ID)
+            idType = it.getString(Constants.ID_TYPE)
+            screenNumber = it.getInt(Constants.SCREEN_NUMBER)
+            objectType = it.getString(Constants.OBJECT_TYPE)
+            inspectionId = it.getString(Constants.INSPECTION_ID)
 
         }
     }
@@ -203,28 +203,43 @@ class UploadImageFragment : BaseFragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(documentType: String, id: String?,idType: String?,screenNumber:Int,objectType:String) =
+        fun newInstance(documentType: String, id: String?,idType: String?,screenNumber:Int,objectType:String,inspectionId:String) =
             UploadImageFragment().apply {
                 arguments = Bundle().apply {
-                    putString(com.example.carinspection.view.fragment.documentType, documentType)
+                    putString(Constants.DOCUMENT_TYPE, documentType)
                     id?.let {
-                        putString(com.example.carinspection.view.fragment.id, id)
-                        putString(com.example.carinspection.view.fragment.idType, idType)
+                        putString(Constants.ID, id)
+                        putString(Constants.ID_TYPE, idType)
                     }
-                    putInt(com.example.carinspection.view.fragment.screenNumber,screenNumber)
-                    putString(com.example.carinspection.view.fragment.objectType,objectType)
+                    putInt(Constants.SCREEN_NUMBER,screenNumber)
+                    putString(Constants.OBJECT_TYPE,objectType)
+                    putString(Constants.INSPECTION_ID,inspectionId)
 
                 }
             }
     }
     fun getData() {
         if (checkValidationManadatory()) {
+            launch {
+                context?.let {
+                    inspectionData?.let { it1 ->
+                        InspectionDatabase.getInstance(it).inspectionDataDao.insert(
+                            it1
+                        )
+                    }
+                }
+            }
+
             inspectionData?.let { fragmentInterfacer?.sendDataToActivity(it) }
         }
     }
 
     private fun checkValidationManadatory(): Boolean {
-        inspectionData = InspectionData(documentType,AppHelper.convertToString(uploadMediaData), screenNumber, Constants.UPLOAD_IMAGE, false)
+        inspectionData = inspectionId?.toInt()?.let {
+            InspectionData(documentType,AppHelper.convertToString(uploadMediaData), screenNumber, Constants.UPLOAD_IMAGE, false,
+                it
+            )
+        }
          return true
     }
 

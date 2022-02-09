@@ -15,7 +15,7 @@ interface InspectionAnswerDao {
 
     /*    @Query("SELECT * FROM paddata WHERE uid = :uid LIMIT 1")
     PadData findByPadData(int uid);*/
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(inspectionData: InspectionData)
 
     @Insert

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.carinspection.database.InspectionDatabase
 import com.example.carinspection.databinding.FragmentListNameDataBinding
@@ -48,6 +49,7 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
     private var isEditable: Boolean = false
     private var objectType: String? = null
     private var listDataNumber: Int = 0
+    private var inspectionId : String? = null
 
     private var listNameDataBinding: FragmentListNameDataBinding? = null
 
@@ -60,6 +62,8 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
             isEditable = it.getBoolean(Constants.IS_EDITABLE)
             objectType = it.getString(Constants.OBJECT_TYPE)
             listDataNumber = it.getInt(LIST_DATA_NUMBER)
+            inspectionId = it.getString(Constants.INSPECTION_ID)
+
 
         }
     }
@@ -134,7 +138,7 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
                         answer: String?,
                         objectType: String,
                         screenNumber: Int,
-                        isEditable: Boolean,listDataNumber: Int) =
+                        isEditable: Boolean,listDataNumber: Int,inspectionId :String) =
             ListNameDataFragment().apply {
                 arguments = Bundle().apply {
                     putString(Constants.QUESTION, question)
@@ -143,6 +147,7 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
                     putBoolean(Constants.IS_EDITABLE, isEditable)
                     putString(Constants.OBJECT_TYPE, objectType)
                     putInt(LIST_DATA_NUMBER, listDataNumber)
+                    putString(Constants.INSPECTION_ID, inspectionId)
                 }
             }
     }
@@ -156,12 +161,37 @@ class ListNameDataFragment : BaseFragment(),AdapterRadioQuestion.ClickListnerOnI
     }
     fun getData() {
         if (checkValidationManadatory()) {
+            launch {
+                context?.let {
+                    inspectionData?.let { it1 ->
+                        InspectionDatabase.getInstance(it).inspectionDataDao.insert(
+                            it1
+                        )
+                    }
+                }
+            }
+
             inspectionData?.let { fragmentInterfacer?.sendDataToActivity(it) }
         }
     }
 
     private fun checkValidationManadatory(): Boolean {
-        inspectionData = InspectionData(listNameValue?.LIST_NAME_VALUE,AppHelper.convertToString(listNameValue),screenNumber , Constants.LIST_DATA, false)
+        if(listNameValue?.isSelected == true) {
+            inspectionData = inspectionId?.toInt()?.let {
+                InspectionData(
+                    listNameValue?.LIST_NAME_VALUE,
+                    AppHelper.convertToString(listNameValue),
+                    screenNumber,
+                    Constants.LIST_DATA,
+                    isEditable,
+                    it
+                )
+            }
+        }else{
+            Toast.makeText(context,"Please select value",Toast.LENGTH_LONG).show()
+            return false
+        }
+
         return true
     }
 

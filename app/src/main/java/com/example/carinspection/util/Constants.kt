@@ -16,4 +16,6 @@ object Constants {
     const val FILE = "FILE"
     const val LIST_DATA = "LIST DATA"
     const val STRING_DATA = "STRING_DATA"
+    const val INSPECTION_ID = "INSPECTION_ID"
+
 }

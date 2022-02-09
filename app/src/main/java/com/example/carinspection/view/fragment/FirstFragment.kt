@@ -2,25 +2,22 @@ package com.example.carinspection.view.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.text.set
 import com.example.carinspection.database.InspectionDatabase
 import com.example.carinspection.databinding.FragmentFirstBinding
 import com.example.carinspection.model.InspectionData
+import com.example.carinspection.util.Constants
+import com.example.carinspection.util.SharedPrefrenceHelper
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "question"
-private const val ARG_PARAM2 = "answer"
-private const val ARG_PARAM3 = "screenNumber"
-private const val ARG_PARAM4 = "isEditable"
-private const val ARG_PARAM5 = "objectType"
+
+
 
 /**
  * A simple [Fragment] subclass.
@@ -31,11 +28,12 @@ class FirstFragment : BaseFragment() {
     private var databinding: FragmentFirstBinding? = null
 
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private var param3: String? = null
-    private var param4: Boolean = false
-    private var param5: String? = null
+    private var question: String? = null
+    private var answer: String? = null
+    private var screenNumber: Int? = null
+    private var isEditable: Boolean = false
+    private var objectType: String? = null
+    private var inspectionId: String? = null
 
     var fragmentInterfacer: FirstFragmentInterface? = null
     var inspectionData: InspectionData? = null
@@ -43,11 +41,12 @@ class FirstFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-            param3 = it.getString(ARG_PARAM3)
-            param4 = it.getBoolean(ARG_PARAM4)
-            param5 = it.getString(ARG_PARAM5)
+            question = it.getString(Constants.QUESTION)
+            answer = it.getString(Constants.ANSWER)
+            screenNumber = it.getInt(Constants.SCREEN_NUMBER)
+            isEditable = it.getBoolean(Constants.IS_EDITABLE)
+            objectType = it.getString(Constants.OBJECT_TYPE)
+            inspectionId = it.getString(Constants.INSPECTION_ID)
 
         }
     }
@@ -69,12 +68,12 @@ class FirstFragment : BaseFragment() {
 
     private fun setAnswer() {
         databinding?.editAnswer?.run {
-        if (!param2.isNullOrBlank()) {
-            param2.also { setText(it) }
-            setHint(param1)
+        if (!answer.isNullOrBlank()) {
+            answer.also { setText(it) }
+            setHint(question)
         }
 
-            if (param4) {
+            if (isEditable) {
                 setFocusable(true);
                 setFocusableInTouchMode(true);
                 setClickable(true);
@@ -91,17 +90,31 @@ class FirstFragment : BaseFragment() {
     }
 
     private fun setQuestion() {
-        databinding?.quesHeading?.text = param1
+        databinding?.quesHeading?.text = question
     }
 
     fun getData() {
         if (checkValidationManadatory()) {
-            launch {
-                context?.let {
-                    inspectionData?.let { it1 ->
-                        InspectionDatabase.getInstance(it).inspectionDataDao.insert(
-                            it1
-                        )
+            if(SharedPrefrenceHelper.isUpdateData(inspectionId,context))
+            {
+                launch {
+                    context?.let {
+                        inspectionData?.let { it1 ->
+                            InspectionDatabase.getInstance(it).inspectionDataDao.update(
+                                it1
+                            )
+                        }
+                    }
+                }
+
+            }else {
+                launch {
+                    context?.let {
+                        inspectionData?.let { it1 ->
+                            InspectionDatabase.getInstance(it).inspectionDataDao.insert(
+                                it1
+                            )
+                        }
                     }
                 }
             }
@@ -114,10 +127,14 @@ class FirstFragment : BaseFragment() {
         var ismanadatoryData: Boolean = true
         var answer = databinding?.editAnswer?.text.toString()
         if (answer.isNullOrBlank()) {
-            Toast.makeText(context, param1, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, question, Toast.LENGTH_LONG).show()
             return false
         }
-        inspectionData = InspectionData(param1,answer, param3?.toInt(), param5, param4)
+        inspectionData = inspectionId?.toInt()?.let {
+            InspectionData(question,answer, screenNumber,
+                objectType, isEditable, it
+            )
+        }
         return ismanadatoryData
 
     }
@@ -138,15 +155,18 @@ class FirstFragment : BaseFragment() {
             answer: String?,
             objectType: String,
             screenNumber: Int,
-            isEditable: Boolean
+            isEditable: Boolean,
+            inspectionId: String
         ) =
             FirstFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, question)
-                    putString(ARG_PARAM2, answer)
-                    putInt(ARG_PARAM3, screenNumber)
-                    putBoolean(ARG_PARAM4, isEditable)
-                    putString(ARG_PARAM5, objectType)
+                    putString(Constants.QUESTION, question)
+                    putString(Constants.ANSWER, answer)
+                    putInt(Constants.SCREEN_NUMBER, screenNumber)
+                    putBoolean(Constants.IS_EDITABLE, isEditable)
+                    putString(Constants.OBJECT_TYPE, objectType)
+                    putString(Constants.INSPECTION_ID, inspectionId)
+
                 }
             }
     }

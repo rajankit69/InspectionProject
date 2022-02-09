@@ -17,5 +17,6 @@ object Utils {
     val SignUp_Fragment = "SignUp_Fragment"
     val ForgotPassword_Fragment = "ForgotPassword_Fragment"
     val PinValidation_Fragment = "ForgotPassword_Fragment"
+    val Review_Fragment = "Review_Fragment"
 
 }

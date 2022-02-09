@@ -84,5 +84,18 @@ object SharedPrefrenceHelper {
         val sharedPreferences = getSharedPreferences(Constants.SHARED_PREFRENCE, context)
         return sharedPreferences.getString("screen_pin", null)
     }
+    fun setUpdateData(id: String, context: Context, isUpdateData:Boolean)
+    {
+        if(context!=null) {
+            val edit = getSharedPreferencesEditor(Constants.SHARED_PREFRENCE, context)
+            edit.putBoolean(id, isUpdateData)
+            edit.apply()
+        }
+    }
+    fun isUpdateData(id:String?,context: Context?): Boolean {
+        if (context == null) return false
+        val sharedPreferences = getSharedPreferences(Constants.SHARED_PREFRENCE, context)
+        return sharedPreferences.getBoolean(id,false)
+    }
 
 }
